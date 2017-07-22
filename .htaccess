@@ -1,0 +1,13 @@
+Options -Indexes
+
+<FilesMatch "^(kmdbalance\.php)$">
+    AuthType None
+    Require all granted
+</FilesMatch>
+
+<FilesMatch "\.(htaccess|htpasswd|ini|phps|fla|psd|log|sh)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+
