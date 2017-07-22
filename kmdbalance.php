@@ -51,10 +51,23 @@ function KMD_listunspent($user,$password,$ip,$port) {
     if ($response) {
         if (!isset($response["error"])) {
             $input = [];
+            
+            
             foreach ($response["result"] as $res) {
                 isset($input[$res["address"]]) ? $input[$res["address"]] += $res["amount"] : $input[$res["address"]] = $res["amount"];
             }
+                        
+            /*
             
+            // just a same sum function via array_reduce ;)
+            // https://stackoverflow.com/questions/14195916/associative-array-sum-values-of-the-same-key
+            
+            $input = array_reduce($response["result"], function ($a1, $b1) {
+                isset($a1[$b1['address']]) ? $a1[$b1['address']] += $b1['amount'] : $a1[$b1['address']] = $b1['amount'];
+            return $a1;
+            });
+            */
+                        
             foreach ($input as $address => $amount) { $message .= sprintf('<code>%15.8f</code> - <a href="kmd.explorer.supernet.org/address/%s">%s</a>'."\n",$amount,$address,$address); }
             // $message .= "<code>".sprintf("%15.8f",array_sum($input))."</code> - <b>Total balance</b>\n";
             $message .= "<code>---------------\n".sprintf("%15.8f",array_sum($input))."</code>\n";
@@ -92,7 +105,7 @@ function KMD_getblockchaininfo($user,$password,$ip,$port) {
     if ($response) {
         if (!isset($response["error"])) {
             $input = [];
-            logger(var_export($response["result"],true));
+            // logger(var_export($response["result"],true));
             $message = "<b>Status:</b>\n";
             $message .= isset($response["result"]["chain"]) ? "Chain: ".$response["result"]["chain"]."\n" : "";
             $message .= isset($response["result"]["blocks"]) ? "Blocks: ".$response["result"]["blocks"]."\n" : "";
